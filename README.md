@@ -31,7 +31,6 @@ bo_eda_experiments.ipynb   Main implementation and experimental analysis
 results/                   CSV results for the three methods
 report/                    LNCS report source and generated PDF
 report/chapters/           Individual report chapter files
-proyect.txt                Course project requirements
 ```
 
 ## Setup
