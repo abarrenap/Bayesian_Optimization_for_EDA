@@ -17,12 +17,12 @@ The notebook contains the implementations, runs the experiments, saves the resul
 | Population size | 30 |
 | Selection ratio | 50% |
 | Runs per benchmark | 10 |
-| Maximum evaluations per run | 3,000 |
-| Local-search subset | Best 25% |
-| Local budget per generation | 40 evaluations |
+| Maximum evaluations per run | 600 |
+| Local-search subset | Best solution |
+| Local budget per generation | 10 evaluations |
 | Local budget per solution | 10 evaluations |
 | BO acquisition | Expected Improvement |
-| BO trust region | 15% of the global range |
+| BO trust region | 5% of the global range |
 
 ## Repository structure
 
@@ -38,7 +38,7 @@ report/chapters/           Individual report chapter files
 Create a Python environment and install the required packages:
 
 ```bash
-pip install jupyter numpy pandas matplotlib seaborn scipy tqdm scikit-optimize pateda
+pip install jupyter ipywidgets numpy pandas matplotlib seaborn scipy tqdm scikit-optimize pateda
 ```
 
 Open the notebook:

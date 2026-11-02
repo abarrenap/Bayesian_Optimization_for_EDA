@@ -1,0 +1,59 @@
+\section{Problem Definition}
+
+This work investigates whether Bayesian Optimization (BO) can improve the
+performance of a continuous Estimation of Distribution Algorithm (EDA) when
+used as a local-search operator. The problem is to find high-quality solutions
+within a fixed number of objective evaluations. The aim is therefore to
+determine whether spending part of the available budget on local refinement
+is more effective than allocating the entire budget to the EDA's population
+search.
+
+\subsection{Optimization Setting}
+
+We consider bounded continuous minimization problems of the form
+\begin{equation}
+    \min_{\mathbf{x} \in \mathcal{X}} f(\mathbf{x}),
+    \qquad
+    \mathcal{X} = \prod_{j=1}^{d} [\ell_j,u_j],
+\end{equation}
+where $\mathbf{x}$ is a vector of $d$ real-valued decision variables,
+$f$ is the objective function, and $\ell_j$ and $u_j$ define the bounds of
+each variable. The algorithms obtain information about the objective through
+evaluations of candidate solutions. Given a budget $B$, the desired output
+is the best solution observed before that budget is exhausted:
+\begin{equation}
+    \hat{\mathbf{x}}_B \in
+    \operatorname*{arg\,min}_{\mathbf{x} \in \{\mathbf{x}_1,\ldots,
+    \mathbf{x}_{N}\}} f(\mathbf{x}), \qquad N \leq B.
+\end{equation}
+The budget includes evaluations used by both population search and local
+search, including numerical gradient estimation when applicable.
+
+The experimental scope is restricted to four deterministic benchmark
+functions in five dimensions: Sphere, Rastrigin, Ackley, and Rosenbrock.
+These provide different search landscapes on which to examine the proposed
+hybrid approach. The budget is set to $B=600$ objective evaluations per
+run. Although these benchmarks are inexpensive to evaluate, the evaluation
+limit provides a controlled setting for studying how the methods allocate
+their search effort.
+
+\subsection{Motivation for Local Refinement}
+
+EDAs learn a probability distribution from selected solutions and sample new candidates from it \cite{larranaga2002eda}. The baseline uses independent Gaussian marginals, which concentrate sampling around promising regions but do not represent dependencies between variables. Local refinement may improve precision, yet its evaluations displace population sampling. BO adds a surrogate that can guide these local evaluations, together with computational overhead. The experiment tests whether that tradeoff is favorable.
+
+\subsection{Research Objective and Comparison}
+
+The central research question is whether BO-based local refinement produces
+better solutions within the same objective-evaluation budget than either a
+plain Gaussian EDA or an EDA using L-BFGS-B local search. The plain EDA
+provides the population-search baseline, while L-BFGS-B provides a
+conventional local-optimization comparison. Together, these methods allow
+the experiments to assess both the value of adding local search and the
+relative performance of the two local-search choices.
+
+Performance is examined through the final best objective value and variability
+across repeated runs. Evaluation histories would additionally be needed to
+compare convergence, but are not present in the saved experiment records. Equal evaluation budgets are the principal comparison
+constraint; they do not imply equal execution times. Conclusions are limited
+to the selected benchmarks, dimensionality, and experimental settings,
+rather than establishing that one approach is universally preferable.

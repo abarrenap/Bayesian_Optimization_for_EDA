@@ -2,7 +2,9 @@
 .ipynb_checkpoints/
 __pycache__/
 *.py[cod]
+.vscode/
 
+.vscode/settings.json
 report/*.aux
 report/*.bbl
 report/*.blg

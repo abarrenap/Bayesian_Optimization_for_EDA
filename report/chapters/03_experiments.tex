@@ -1,1 +1,55 @@
-\section{Experiments Proposed}
+\section{Experimental Design}
+
+\subsection{Benchmark Suite}
+
+The experiments use four deterministic continuous functions in $d=5$ dimensions. The conventional definitions are given below, with the scalar domain bounds applied to every coordinate:
+\begin{align}
+ f_{\mathrm{Sphere}}(\mathbf{x})&=\sum_{j=1}^{d}x_j^2,\\
+ f_{\mathrm{Rastrigin}}(\mathbf{x})&=10d+\sum_{j=1}^{d}\left[x_j^2-10\cos(2\pi x_j)\right],\\
+ f_{\mathrm{Ackley}}(\mathbf{x})&=-20\exp\!\left(-0.2\sqrt{\frac{1}{d}\sum_{j=1}^{d}x_j^2}\right)\nonumber\\
+ &\quad-\exp\!\left(\frac{1}{d}\sum_{j=1}^{d}\cos(2\pi x_j)\right)+20+e,\\
+ f_{\mathrm{Rosenbrock}}(\mathbf{x})&=\sum_{j=1}^{d-1}\left[100(x_{j+1}-x_j^2)^2+(1-x_j)^2\right].
+\end{align}
+The notebook imports the benchmark implementations from \texttt{pateda}. Sphere and Rastrigin use $[-5.12,5.12]^5$, Ackley uses $[-32.768,32.768]^5$, and Rosenbrock uses $[-5,10]^5$. The global minimum is zero for each conventional function: at the origin for the first three, and at the all-ones vector for Rosenbrock. Final objective values can consequently be read as residual errors relative to these optima.
+
+Sphere is a smooth separable baseline. Rastrigin introduces many local minima while retaining coordinate separability. Ackley combines oscillations with a central basin and a broad outer region. Rosenbrock introduces strong interactions between adjacent variables and a narrow curved valley. Together they test different difficulties, but they do not represent a broad survey of continuous optimization problems.
+
+\subsection{Controlled Settings and Repetition}
+
+Table~\ref{tab:settings} summarizes the common settings and the differences introduced by the local operators. There are ten runs for each method--benchmark combination, using seeds 0 through 9. This gives 120 runs in total and 72,000 recorded objective evaluations. All 120 CSV records contain exactly 600 evaluations. The comparisons therefore use the same realized evaluation budget, rather than merely the same nominal cap.
+
+\begin{table}[t]
+\caption{Experimental settings used in the notebook.}
+\label{tab:settings}
+\centering
+\begin{tabular}{ll}
+\toprule
+Setting & Value \\
+\midrule
+Decision variables & 5 continuous variables \\
+Population and selection & 30 individuals; best 50\% selected \\
+Elitism & Enabled for all three methods \\
+Objective budget & 600 true evaluations per run \\
+Repetitions & 10 seeds per benchmark and method \\
+Local subset & Best individual in the population \\
+Local allowance & At most 10 evaluations per invocation \\
+Classical search & L-BFGS-B; numerical gradients; global bounds \\
+BO search & Gaussian process; EI; fixed local box \\
+BO box radius & 5\% of the global range per coordinate \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Identical seed labels support descriptive comparisons but do not imply identical candidate populations after the methods diverge. No hyperparameter sweep is included in the saved experiment.
+
+\subsection{Performance Measures and Available Evidence}
+
+The main measure is the final best objective value. For each benchmark and method, the median summarizes the ten runs, and the first and third quartiles describe their dispersion. Quartiles use linear interpolation, matching the notebook's \texttt{pandas} calculations. Values from different functions are not pooled because their scales and landscapes differ. A logarithmic vertical axis is used for within-benchmark distribution plots; all saved final values are positive.
+
+Pairwise wins count strictly lower final objectives for corresponding seed labels, with denominator ten. A baseline win means beating the plain EDA, rather than being best among all three methods.
+
+The CSV files store endpoints rather than evaluation-by-evaluation histories. They support final-value comparisons but cannot establish convergence speed, the stage at which improvements occurred, or the number of successful local calls. Existing convergence or ablation graphics are therefore not used as evidence for this experiment. Runtime is also absent, so the analysis concerns objective-evaluation efficiency rather than elapsed-time efficiency. The experiment is reported descriptively, without claims of statistical significance from ten runs per configuration.
+
+\subsection{Reproducibility}
+
+The source notebook contains the algorithms and the loops that save the three method-specific CSV files. Report tables and the distribution figure are generated directly from these files. The software stack includes Python, NumPy, pandas, SciPy, scikit-optimize, and \texttt{pateda}. The repository does not provide a complete locked dependency environment, which limits exact reproduction across library versions, especially for default Gaussian-process settings and internal EDA interfaces. This report analyzes the saved runs and does not claim to have rerun the optimization experiments.
