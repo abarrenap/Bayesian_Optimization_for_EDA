@@ -1,61 +1,36 @@
-\section{Results of the Experiments}
+\section{Results: Final Objective Values and Convergence}
 
 \subsection{Final Objective Values}
+\autoref{fig:final_distributions} compares the final objective values across ten runs, and \autoref{tab:results} summarizes the same distributions using medians and interquartile ranges. Lower values are better. The plain EDA obtains the lowest median on all four benchmarks. Its advantage is largest on Sphere, where the median is $3.55\times10^{-5}$, compared with $3.12\times10^{-4}$ for BO and $5.02\times10^{-4}$ for L-BFGS-B. On Ackley, its median is $0.0897$, compared with $0.417$ and $0.484$ for the classical and BO hybrids, respectively.
 
-Table~\ref{tab:results} reports the medians and interquartile ranges from the current CSV files. The plain EDA has the lowest median on all four benchmarks. The BO hybrid has a lower median than the L-BFGS-B hybrid on Sphere, Rastrigin, and Rosenbrock, while L-BFGS-B has the lower median on Ackley. Thus, the results give some support for BO relative to this particular classical wrapper, but no median improvement over the plain population method.
+The distributions overlap more on Rastrigin and Rosenbrock. On Rastrigin, the medians are $6.44$ for the plain EDA, $7.44$ for BO, and $8.11$ for L-BFGS-B; on Rosenbrock, they are $4.61$, $5.49$, and $7.16$, respectively. BO therefore achieves a lower median final objective value than the classical hybrid on three benchmarks, with Ackley as the exception, but neither hybrid improves on the plain EDA by this measure. The spread of the individual points shows that the ranking can differ between runs.
 
-\begin{table}[t]
-\caption{Final objective after 600 evaluations. Entries show median and, underneath, $[Q_1,Q_3]$ across ten runs. Lower is better; bold medians identify the best method per benchmark.}
+\begin{table}[H]
+\caption{Final objective after 600 evaluations. Each entry gives the median, with the interquartile range below. The lowest median per benchmark is bold.}
 \label{tab:results}
 \centering
 \small
-\setlength{\tabcolsep}{4pt}
-\resizebox{\textwidth}{!}{\input{tables/main_results}}
+\setlength{\tabcolsep}{5pt}
+\input{tables/main_results}
 \end{table}
 
-On Sphere, the plain EDA reaches a median of $3.55\times10^{-5}$, compared with $3.12\times10^{-4}$ for BO and $5.02\times10^{-4}$ for L-BFGS-B. The BO median residual is approximately 8.8 times the plain median, and the classical hybrid's is approximately 14.2 times as large. Both hybrids reach small absolute errors, but the extra local operator does not improve precision at the fixed evaluation budget. The BO results also include a relatively poor run at $3.83\times10^{-3}$, whereas its best run reaches $2.51\times10^{-5}$.
-
-On Rastrigin, the medians are 6.44 for the plain EDA, 7.44 for BO, and 8.11 for L-BFGS-B. The BO interquartile interval, $[5.64,8.80]$, overlaps the plain EDA interval, $[4.81,9.20]$. The relatively small difference in medians and substantial run variation make this a less consistent separation than Sphere or Ackley. BO performs competitively on some seeds, but the observed endpoints do not show reliable escape from the function's local minima.
-
-Ackley produces the clearest baseline advantage. The plain EDA median is 0.0897, compared with 0.417 for L-BFGS-B and 0.484 for BO. The corresponding hybrid-to-plain median ratios are approximately 4.7 and 5.4. The interquartile intervals are separated: the upper quartile of the plain EDA is about 0.100, below the lower quartile of either hybrid. Both local methods therefore use the budget less effectively on this benchmark in the observed experiment.
-
-On Rosenbrock, the plain EDA median is 4.61, BO reaches 5.49, and L-BFGS-B reaches 7.16. The distributions overlap considerably. BO's median is approximately 19\% above the baseline, while the classical hybrid's is approximately 55\% above it. No method consistently approaches the zero optimum in this setting. The coordinate-independent population model and the short local calls are plausible constraints on progress along the curved valley, although the endpoint records cannot isolate their individual effects.
-
-\begin{figure}[t]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{final_distributions.pdf}
-\caption{Final objective distributions from the current saved runs. Each dot is one run; boxes show the interquartile range and median, with whiskers extending to the most extreme observations within $1.5$ interquartile ranges. Each panel uses its own logarithmic vertical scale.}
-\label{fig:distributions}
+\caption{Final objective values after 600 evaluations across ten seeds. Boxes show the interquartile range and median; points show all runs. Each benchmark uses its own linear vertical scale. Whiskers extend to the most extreme values within 1.5 interquartile ranges of the box.}
+\label{fig:final_distributions}
 \end{figure}
 
-\subsection{Comparisons by Seed}
+\subsection{Convergence}
+\autoref{fig:convergence} shows the evolution of the best objective found. The horizontal axis counts all objective evaluations, including those used by LS. This makes the three methods comparable despite their different numbers of EDA generations. Each curve is the mean across ten runs, and the shaded band is the interquartile range.
 
-Table~\ref{tab:wins} complements the medians with direct comparisons between corresponding seed labels. BO beats the plain EDA in one of ten Sphere runs, five Rastrigin runs, no Ackley runs, and three Rosenbrock runs. The classical hybrid beats the plain EDA in zero, three, zero, and one run, respectively. BO therefore records more baseline wins than the classical hybrid on three functions and ties it on Ackley.
-
-\begin{table}[t]
-\caption{Strict pairwise wins out of ten corresponding seed labels. A win means a lower final objective for the method listed first.}
-\label{tab:wins}
+\begin{figure}[H]
 \centering
-\begin{tabular}{lrrr}
-\toprule
-Benchmark & BO vs. plain & L-BFGS-B vs. plain & BO vs. L-BFGS-B \\
-\midrule
-Sphere & 1 & 0 & 6 \\
-Rastrigin & 5 & 3 & 8 \\
-Ackley & 0 & 0 & 6 \\
-Rosenbrock & 3 & 1 & 5 \\
-\bottomrule
-\end{tabular}
-\end{table}
+\includegraphics[width=\textwidth]{main_convergence.pdf}
+\caption{Best-so-far objective over 600 evaluations. Lines show means and bands show interquartile ranges across ten seeds. Each panel uses its own logarithmic vertical scale.}
+\label{fig:convergence}
+\end{figure}
 
-On Ackley, BO beats L-BFGS-B on six corresponding seeds despite having a worse marginal median. Likewise, BO wins half the Rastrigin baseline comparisons but has a worse median. Pairwise counts and marginal medians describe different aspects of the sample.
+All three methods reduce the objective during the run, but the LS variants do not produce a better mean endpoint. On Sphere, the plain EDA finishes about one order of magnitude below the hybrids. On Rastrigin, the mean evaluation at which each run first finds its final best value is 505 for the plain EDA, 536 for L-BFGS-B, and 538 for BO. This leaves a longer final period without improvement than on the other benchmarks. On Sphere, Ackley, and Rosenbrock, the corresponding mean evaluations range from 571.5 to 594, so improvements are still found near the end of the budget.
 
-\subsection{Interpretation of the Budget Tradeoff}
-
-The consistent median advantage of the plain EDA suggests that, for these settings, keeping more evaluations in population search is more useful than repeatedly refining one individual. The plain method is configured for 19 subsequent populations, while each hybrid requests 14. This reduces opportunities to select and refit the population model. A successful local improvement must offset that change in search trajectory as well as its direct evaluation cost.
-
-BO has additional restrictions. Its model is restarted around one centre at every invocation, giving it at most eleven observations in five dimensions. The box radius remains fixed as the population contracts, so the local region does not become smaller automatically when greater precision is needed. The physical radius also varies with the benchmark domain: 0.512 per coordinate on Sphere and Rastrigin, 3.2768 on Ackley, and 0.75 on Rosenbrock before boundary clipping. Consequently, the same relative parameter does not imply the same relationship to local landscape structure.
-
-L-BFGS-B faces a different constraint: numerical gradients and line-search evaluations compete for ten true calls. The artificial-penalty guard can stop useful optimizer work partway through a numerical step. Furthermore, BO is restricted to a local box whereas L-BFGS-B uses the full global bounds. The comparison therefore concerns complete implemented operators, including their domains, initialization, and budget handling. It does not isolate the effect of substituting one optimizer while holding every other local-search detail identical.
-
-These mechanisms provide possible explanations, rather than measured causal decompositions. Without local-call logs, histories, and controlled ablations, the saved endpoints cannot determine which mechanism accounts for the observed differences. What they do establish is that neither hybrid improves the median final outcome over the plain EDA under the recorded budget.
+No run reaches an objective value of $10^{-6}$ or lower. The observed plateaus therefore indicate a lack of further improvement within the available budget, rather than convergence to the global optimum. Under these settings, using all evaluations for population search gives the best mean final performance. Local refinement can improve the selected individual, but its evaluation cost does not translate into a better overall mean result in these experiments.

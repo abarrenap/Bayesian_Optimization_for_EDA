@@ -1,8 +1,8 @@
 \section{Problem Definition}
 
-This work investigates whether Bayesian Optimization (BO) can improve the
-performance of a continuous Estimation of Distribution Algorithm (EDA) when
-used as a local-search operator. The problem is to find high-quality solutions
+This work investigates whether Bayesian optimization (BO) can improve the
+performance of a continuous estimation of distribution algorithm (EDA) when
+used as a local search (LS) operator. The problem is to find high-quality solutions
 within a fixed number of objective evaluations.
 
 \subsection{Optimization Setting}
@@ -23,8 +23,7 @@ is the best solution observed before that budget is exhausted:
     \operatorname*{arg\,min}_{\mathbf{x} \in \{\mathbf{x}_1,\ldots,
     \mathbf{x}_{N}\}} f(\mathbf{x}), \qquad N \leq B.
 \end{equation}
-The budget includes evaluations used by both population search and local
-search, including numerical gradient estimation when applicable.
+The budget includes evaluations used by both population search and LS, including numerical gradient estimation when applicable.
 
 The experimental scope is restricted to four deterministic benchmark
 functions in five dimensions: Sphere, Rastrigin, Ackley, and Rosenbrock.
@@ -38,8 +37,8 @@ EDAs learn a probability distribution from selected solutions and sample new can
 \subsection{Research Objective and Comparison}
 
 
-The central research question is whether BO-based local refinement produces better solutions within the same objective-evaluation budget than either a plain Gaussian EDA or an EDA using L-BFGS-B local search. The plain EDA provides the population-search baseline, while L-BFGS-B provides a conventional local-optimization comparison. Together, these methods allow the experiments to assess both the value of adding local search and the relative performance of the two local-search choices.
+The central research question is whether BO-based local refinement produces better solutions within the same objective-evaluation budget than either a plain Gaussian EDA or an EDA using L-BFGS-B LS. The plain EDA provides the population-search baseline, while L-BFGS-B provides a conventional local-optimization comparison. Together, these methods allow the experiments to assess both the value of adding LS and the relative performance of the two LS choices.
 
 Performance is examined through the final best objective value and variability
 across repeated runs. Evaluation histories are additionally used to
-compare convergence of the models. Equal evaluation budgets are the principal comparison constraint. Conclusions are limited to the selected benchmarks, dimensionality, and experimental settings, rather than establishing that one approach is universally preferable.
+compare the convergence of the algorithms. Equal evaluation budgets are the principal comparison constraint. Conclusions are limited to the selected benchmarks, dimensionality, and experimental settings, rather than establishing that one approach is universally preferable.
