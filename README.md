@@ -1,70 +1,41 @@
 # Bayesian Optimization for EDA
 
-This project evaluates Bayesian Optimization (BO) as a local-search operator inside a continuous Estimation of Distribution Algorithm (EDA). It compares three methods under the same objective-evaluation budget:
+Compare three continuous Estimation of Distribution Algorithm (EDA) methods:
 
 - Plain Gaussian EDA
-- Gaussian EDA with L-BFGS-B local search
-- Gaussian EDA with Bayesian Optimization
+- EDA with L-BFGS-B local search
+- EDA with Bayesian Optimization (BO) local search
 
-The notebook contains the implementations, runs the experiments, saves the results, and generates the comparison tables and plots. The accompanying short report uses the Springer Lecture Notes in Computer Science format.
+Experiments use Sphere, Rastrigin, Ackley, and Rosenbrock in 5 dimensions, with 10 runs per benchmark and a budget of 600 objective evaluations per run, including local search. Lower objective values are better.
 
-## Experimental setup
+## Run the experiments
 
-| Setting | Value |
-| --- | --- |
-| Benchmarks | Sphere, Rastrigin, Ackley, Rosenbrock |
-| Dimensions | 5 |
-| Population size | 30 |
-| Selection ratio | 50% |
-| Runs per benchmark | 10 |
-| Maximum evaluations per run | 600 |
-| Local-search subset | Best solution |
-| Local budget per generation | 10 evaluations |
-| Local budget per solution | 10 evaluations |
-| BO acquisition | Expected Improvement |
-| BO trust region | 5% of the global range |
-
-## Repository structure
-
-```text
-bo_eda_experiments.ipynb   Main implementation and experimental analysis
-results/                   CSV results for the three methods
-report/                    LNCS report source and generated PDF
-report/chapters/           Individual report chapter files
-```
-
-## Setup
-
-Create a Python environment and install the required packages:
+Install the Python dependencies:
 
 ```bash
-pip install jupyter ipywidgets numpy pandas matplotlib seaborn scipy tqdm scikit-optimize pateda
+pip install jupyterlab ipywidgets numpy pandas matplotlib seaborn scipy tqdm scikit-optimize pateda
 ```
 
-Open the notebook:
+From the project folder, open the notebook and run its cells in order:
 
 ```bash
 jupyter lab bo_eda_experiments.ipynb
 ```
 
-Run the notebook from top to bottom to reproduce the experiment CSV files and figures.
+The notebook saves final results, evaluation histories, and convergence summaries to `results/`, and displays comparison tables and plots. Running it again overwrites the generated CSV files.
 
-## Results
+## Files
 
-The notebook writes one file per method:
+- `bo_eda_experiments.ipynb` — implementation, experiments, and analysis.
+- `results/` — experiment results and convergence data in CSV format.
+- `report/` — LaTeX report, figures, tables, and compiled PDF.
 
-- `results/plain_eda_results.csv`
-- `results/classical_ls_results.csv`
-- `results/bo_results.csv`
+## Build the report
 
-Each row records the benchmark, run number, seed, number of evaluations, and best objective value found. Lower objective values are better.
-
-## Report
-
-The report is split into chapter files imported by `report/main.tex`. To compile it locally:
+With a LaTeX installation and `latexmk` available:
 
 ```bash
 make -C report
 ```
 
-The generated document is available at `report/main.pdf`.
+The report is saved as `report/main.pdf`.
